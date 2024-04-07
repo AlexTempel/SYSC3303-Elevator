@@ -37,7 +37,6 @@ public class ElevatorSubsystem implements Runnable {
         System.out.println("Starting Elevator");
         state = ElevatorSubsystem.ElevatorState.WAITING;
         System.out.printf("Elevator %d Current State: %s\n", elevator_id, state);
-
         while (state != ElevatorSubsystem.ElevatorState.BROKEN) {
             // Obtain formatted request data
             if (state != ElevatorState.WAITING) {
@@ -85,7 +84,6 @@ public class ElevatorSubsystem implements Runnable {
             socket.receive(receivePacket);
 
         } catch (IOException e) {
-            //System.out.println("catching excpetion for " + elevator_id);
             return;
         }
 
@@ -95,7 +93,7 @@ public class ElevatorSubsystem implements Runnable {
         }
 
         // Add request to list
-        System.out.println("Elevator " + elevator_id + " received request from scheduler");
+        System.out.println("Elevator received request from scheduler");
         allReqList.add(Request.parsePacket(receivePacket));
         getRequests();
     }
@@ -104,68 +102,65 @@ public class ElevatorSubsystem implements Runnable {
      * Determine which of the Requests to serve
      */
     public void pickRequest(ArrayList<Request> reqList) {
-
-        // Elevator Full
         if (reqList.isEmpty() || currReqList.size() == 5) {
             return;
         } else {
             // Loop through all requests to see the appropriate one to service
-            //while (currReqList.size() < 5) {
+            while (currReqList.size() < 5) {
 
-            //System.out.println("This is the size of currReqList: " + currReqList.size());
-            Request tempReq = null;
-            int removeIndex = -1;
+                //System.out.println("This is the size of currReqList: " + currReqList.size());
+                Request tempReq = null;
+                int removeIndex = -1;
 
-            for (int i = 0; i < reqList.size(); i++) {
-                // Check only for upwards requests
-                if (upwards) {
-                    // Assign a request to temp req only if it is correct direction
-                    if (tempReq == null) {
-                        if (reqList.get(i).getStartingFloor() - current_floor >= 0) {
-                            tempReq = reqList.get(i);
-                            removeIndex = i;
+                for (int i = 0; i < reqList.size(); i++) {
+                    // Check only for upwards requests
+                    if (upwards) {
+                        // Assign a request to temp req only if it is correct direction
+                        if (tempReq == null) {
+                            if (reqList.get(i).getStartingFloor() - current_floor >= 0){
+                                tempReq = reqList.get(i);
+                                removeIndex = i;
+                            }
+                        }else{
+                            // Compare the temp req with the next one in the list
+                            int currentDiff = tempReq.getStartingFloor() - current_floor;
+                            int newDiff = reqList.get(i).getStartingFloor() - current_floor;
+
+                            // Replace if it is closer and upwards
+                            if(newDiff < currentDiff && newDiff > 0){
+                                tempReq = reqList.get(i);
+                                removeIndex = i;
+                            }
                         }
-                    } else {
-                        // Compare the temp req with the next one in the list
-                        int currentDiff = tempReq.getStartingFloor() - current_floor;
-                        int newDiff = reqList.get(i).getStartingFloor() - current_floor;
+                    }else{ //assume downwards
+                        // Assign a request to temp req only if it is correct direction
+                        if (tempReq == null) {
+                            if (reqList.get(i).getStartingFloor() - current_floor <= 0){
+                                tempReq = reqList.get(i);
+                                removeIndex = i;
+                            }
+                        }else{
+                            // Compare the temp req with the next one in the list
+                            int currentDiff = tempReq.getStartingFloor() - current_floor;
+                            int newDiff = reqList.get(i).getStartingFloor() - current_floor;
 
-                        // Replace if it is closer and upwards
-                        if (newDiff < currentDiff && newDiff > 0) {
-                            tempReq = reqList.get(i);
-                            removeIndex = i;
-                        }
-                    }
-                } else { //assume downwards
-                    // Assign a request to temp req only if it is correct direction
-                    if (tempReq == null) {
-                        if (reqList.get(i).getStartingFloor() - current_floor <= 0) {
-                            tempReq = reqList.get(i);
-                            removeIndex = i;
-                        }
-                    } else {
-                        // Compare the temp req with the next one in the list
-                        int currentDiff = tempReq.getStartingFloor() - current_floor;
-                        int newDiff = reqList.get(i).getStartingFloor() - current_floor;
-
-                        // Replace if it is closer and downwards
-                        if (newDiff > currentDiff && newDiff < 0) {
-                            tempReq = reqList.get(i);
-                            removeIndex = i;
+                            // Replace if it is closer and downwards
+                            if(newDiff > currentDiff && newDiff < 0){
+                                tempReq = reqList.get(i);
+                                removeIndex = i;
+                            }
                         }
                     }
                 }
+                if (tempReq != null) {
+                    currReqList.add(tempReq);
+                }
+                if (removeIndex != -1){
+                    //System.out.println("Removing index: " + removeIndex);
+                    reqList.remove(removeIndex);
+                }
             }
-            if (tempReq != null) {
-                currReqList.add(tempReq);
-            }
-            if (removeIndex != -1) {
-                //System.out.println("Removing index: " + removeIndex);
-                reqList.remove(removeIndex);
-            }
-
         }
-        pickRequest(allReqList);
     }
 
     /**
@@ -209,10 +204,10 @@ public class ElevatorSubsystem implements Runnable {
             currReqList.remove(k);
         }
 
+        System.out.println("Letting " + numLoading + " People on and " + numUnloading + " People off.");
         // Let them on or off
         if (numLoading != 0 || numUnloading != 0){
 
-            System.out.println("Elevator " + elevator_id + " is Letting " + numLoading + " People on and " + numUnloading + " People off.");
             cycleDoors();
             numPeople = numPeople + numLoading - numUnloading;
         }
@@ -220,7 +215,6 @@ public class ElevatorSubsystem implements Runnable {
         // Move if we have direction and request
         if(upwards && !currReqList.isEmpty()){
             current_floor += 1;
-            System.out.println("Elevator " + elevator_id + " is on floor " + current_floor);
         }else if (!upwards && !currReqList.isEmpty()){
             current_floor -= 1;
         }
