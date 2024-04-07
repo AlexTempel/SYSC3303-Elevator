@@ -35,10 +35,14 @@ public class ElevatorSubsystem implements Runnable {
     @Override
     public void run() {
         System.out.println("Starting Elevator");
+        state = ElevatorSubsystem.ElevatorState.WAITING;
+        System.out.printf("Elevator %d Current State: %s\n", elevator_id, state);
         while (state != ElevatorSubsystem.ElevatorState.BROKEN) {
             // Obtain formatted request data
-            state = ElevatorSubsystem.ElevatorState.WAITING;
-            System.out.printf("Elevator %d Current State: %s\n",elevator_id, state);
+            if (state != ElevatorState.WAITING) {
+                state = ElevatorSubsystem.ElevatorState.WAITING;
+                System.out.printf("Elevator %d Current State: %s\n", elevator_id, state);
+            }
             try {
                 if(currReqList.isEmpty()){
                     if(upwards == null){
@@ -48,9 +52,11 @@ public class ElevatorSubsystem implements Runnable {
                     }
                 }
                 getRequests();
-                pickRequest(allReqList);
-                moveElevator();
-                updateScheduler(false);
+                if (!allReqList.isEmpty()) {
+                    pickRequest(allReqList);
+                    moveElevator();
+                    updateScheduler(false);
+                }
             }catch(Exception e){
                 throw new RuntimeException(e);
             }
