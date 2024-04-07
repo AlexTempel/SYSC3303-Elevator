@@ -37,6 +37,7 @@ public class ElevatorSubsystem implements Runnable {
         System.out.println("Starting Elevator");
         state = ElevatorSubsystem.ElevatorState.WAITING;
         System.out.printf("Elevator %d Current State: %s\n", elevator_id, state);
+
         while (state != ElevatorSubsystem.ElevatorState.BROKEN) {
             // Obtain formatted request data
             if (state != ElevatorState.WAITING) {
@@ -84,6 +85,7 @@ public class ElevatorSubsystem implements Runnable {
             socket.receive(receivePacket);
 
         } catch (IOException e) {
+            //System.out.println("catching excpetion for " + elevator_id);
             return;
         }
 
@@ -93,7 +95,7 @@ public class ElevatorSubsystem implements Runnable {
         }
 
         // Add request to list
-        System.out.println("Elevator received request from scheduler");
+        System.out.println("Elevator " + elevator_id + " received request from scheduler");
         allReqList.add(Request.parsePacket(receivePacket));
         getRequests();
     }
@@ -102,11 +104,13 @@ public class ElevatorSubsystem implements Runnable {
      * Determine which of the Requests to serve
      */
     public void pickRequest(ArrayList<Request> reqList) {
-        if (reqList.isEmpty() || currReqList.size() == 5) {
+
+        // Elevator Full
+        if (currReqList.size() == 5) {
             return;
         } else {
             // Loop through all requests to see the appropriate one to service
-            while (currReqList.size() < 5) {
+            //while (currReqList.size() < 5) {
 
                 //System.out.println("This is the size of currReqList: " + currReqList.size());
                 Request tempReq = null;
@@ -159,7 +163,7 @@ public class ElevatorSubsystem implements Runnable {
                     //System.out.println("Removing index: " + removeIndex);
                     reqList.remove(removeIndex);
                 }
-            }
+            //}
         }
     }
 
@@ -204,10 +208,10 @@ public class ElevatorSubsystem implements Runnable {
             currReqList.remove(k);
         }
 
-        System.out.println("Letting " + numLoading + " People on and " + numUnloading + " People off.");
         // Let them on or off
         if (numLoading != 0 || numUnloading != 0){
 
+            System.out.println("Elevator " + elevator_id + " is Letting " + numLoading + " People on and " + numUnloading + " People off.");
             cycleDoors();
             numPeople = numPeople + numLoading - numUnloading;
         }
@@ -215,6 +219,7 @@ public class ElevatorSubsystem implements Runnable {
         // Move if we have direction and request
         if(upwards && !currReqList.isEmpty()){
             current_floor += 1;
+            System.out.println("Elevator " + elevator_id + " is on floor " + current_floor);
         }else if (!upwards && !currReqList.isEmpty()){
             current_floor -= 1;
         }

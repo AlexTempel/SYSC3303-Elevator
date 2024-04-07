@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7cd3474d-9d48-4a76-9fe0-8217bd918d43" name="Changes" comment="Fixed bug in convertToPacket()">
+    <list default="true" id="7cd3474d-9d48-4a76-9fe0-8217bd918d43" name="Changes" comment="fix to omit the &quot;null&quot; addition from tempReq to currReqList">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ElevatorSubsystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ElevatorSubsystem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ElevatorSubsystemTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ElevatorSubsystemTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,12 +24,6 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;AlexTempel&quot;
-  }
-}</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/AlexTempel/SYSC3303-Elevator.git&quot;,
@@ -50,16 +44,9 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.Main.executor": "Run",
-    "Downloaded.Files.Path.Enabled": "false",
-    "JUnit.ElevatorSubsystemTest.executor": "Run",
-    "JUnit.ElevatorSubsystemTest.moveElevatorUntilFailure.executor": "Run",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/alexd/IdeaProjects/SYSC-3303-Project-Iteration-3",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -68,41 +55,6 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.ElevatorSubsystemTest">
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Main" />
-      <module name="Elevator" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="ElevatorSubsystemTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="Elevator" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="ElevatorSubsystemTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="ElevatorSubsystemTest.moveElevatorUntilFailure" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="Elevator" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="ElevatorSubsystemTest" />
-      <option name="METHOD_NAME" value="moveElevatorUntilFailure" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="JUnit.ElevatorSubsystemTest" />
-        <item itemvalue="JUnit.ElevatorSubsystemTest.moveElevatorUntilFailure" />
-        <item itemvalue="Application.Main" />
-      </list>
-    </recent_temporary>
-  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -119,9 +71,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1712462974769</updated>
-      <workItem from="1712462975815" duration="721000" />
-      <workItem from="1712464895588" duration="46000" />
-      <workItem from="1712497750778" duration="4512000" />
+      <workItem from="1712462975815" duration="679000" />
     </task>
     <task id="LOCAL-00001" summary="Project can run">
       <option name="closed" value="true" />
@@ -131,39 +81,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712463504654</updated>
     </task>
-    <task id="LOCAL-00002" summary="Project can run">
+    <task id="LOCAL-00002" summary="fix to omit the &quot;null&quot; addition from tempReq to currReqList">
       <option name="closed" value="true" />
-      <created>1712463681382</created>
+      <created>1712523686921</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1712463681382</updated>
+      <updated>1712523686921</updated>
     </task>
-    <task id="LOCAL-00003" summary="Added Test class">
-      <option name="closed" value="true" />
-      <created>1712497945821</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1712497945821</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Fixed bug where code runs at rest state">
-      <option name="closed" value="true" />
-      <created>1712498849418</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1712498849418</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Fixed bug in convertToPacket()">
-      <option name="closed" value="true" />
-      <created>1712503047017</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1712503047017</updated>
-    </task>
-    <option name="localTasksCounter" value="6" />
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -182,9 +108,18 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Project can run" />
-    <MESSAGE value="Added Test class" />
-    <MESSAGE value="Fixed bug where code runs at rest state" />
-    <MESSAGE value="Fixed bug in convertToPacket()" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed bug in convertToPacket()" />
+    <MESSAGE value="fix to omit the &quot;null&quot; addition from tempReq to currReqList" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix to omit the &quot;null&quot; addition from tempReq to currReqList" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/ElevatorSubsystem.java</url>
+          <line>188</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
