@@ -9,8 +9,8 @@ public class ElevatorSubsystem implements Runnable {
     private final DatagramSocket socket;
     private int ElevatorInfoSocketID;
     private int current_floor;
-    private InetAddress schedulerAddress = null;
-    private int schedulerPort = -1;
+    private InetAddress schedulerAddress;
+    private int schedulerPort = 20002;
     private ElevatorState state;
     private int numPeople = 0;
     private ArrayList<Request> allReqList = new ArrayList<Request>();
@@ -22,13 +22,14 @@ public class ElevatorSubsystem implements Runnable {
      * Contruct the ElevatorSubsystem Object
      * @param id integer identifier of the elevator, also the recieve port
      */
-    public ElevatorSubsystem(int id, int elevatorInfoPort) throws SocketException {
+    public ElevatorSubsystem(int id, int elevatorInfoPort) throws SocketException, UnknownHostException {
         this.elevator_id = id;
         this.doors = new ElevatorDoors();
         this.socket = new DatagramSocket(id);
         this.current_floor = 1; //start the Elevator at the ground floor
         this.state = ElevatorState.WAITING;
         this.ElevatorInfoSocketID = elevatorInfoPort;
+        this.schedulerAddress = InetAddress.getByName("localhost");
 
     }
 
@@ -88,12 +89,12 @@ public class ElevatorSubsystem implements Runnable {
         }
 
         // Find scheduler address from rec'd packet
-        if(schedulerAddress == null) {
-            schedulerPort = receivePacket.getPort();
-        }
+//        if(schedulerAddress == null) {
+//            schedulerPort = receivePacket.getPort();
+//        }
 
         // Add request to list
-        System.out.println("Elevator received request from scheduler");
+        System.out.println("Elevator " + elevator_id + " received request from scheduler");
         allReqList.add(Request.parsePacket(receivePacket));
         getRequests();
     }
@@ -106,61 +107,61 @@ public class ElevatorSubsystem implements Runnable {
             return;
         } else {
             // Loop through all requests to see the appropriate one to service
-            while (currReqList.size() < 5) {
 
-                //System.out.println("This is the size of currReqList: " + currReqList.size());
-                Request tempReq = null;
-                int removeIndex = -1;
 
-                for (int i = 0; i < reqList.size(); i++) {
-                    // Check only for upwards requests
-                    if (upwards) {
-                        // Assign a request to temp req only if it is correct direction
-                        if (tempReq == null) {
-                            if (reqList.get(i).getStartingFloor() - current_floor >= 0){
-                                tempReq = reqList.get(i);
-                                removeIndex = i;
-                            }
-                        }else{
-                            // Compare the temp req with the next one in the list
-                            int currentDiff = tempReq.getStartingFloor() - current_floor;
-                            int newDiff = reqList.get(i).getStartingFloor() - current_floor;
+            //System.out.println("This is the size of currReqList: " + currReqList.size());
+            Request tempReq = null;
+            int removeIndex = -1;
 
-                            // Replace if it is closer and upwards
-                            if(newDiff < currentDiff && newDiff > 0){
-                                tempReq = reqList.get(i);
-                                removeIndex = i;
-                            }
+            for (int i = 0; i < reqList.size(); i++) {
+                // Check only for upwards requests
+                if (upwards) {
+                    // Assign a request to temp req only if it is correct direction
+                    if (tempReq == null) {
+                        if (reqList.get(i).getStartingFloor() - current_floor >= 0){
+                            tempReq = reqList.get(i);
+                            removeIndex = i;
                         }
-                    }else{ //assume downwards
-                        // Assign a request to temp req only if it is correct direction
-                        if (tempReq == null) {
-                            if (reqList.get(i).getStartingFloor() - current_floor <= 0){
-                                tempReq = reqList.get(i);
-                                removeIndex = i;
-                            }
-                        }else{
-                            // Compare the temp req with the next one in the list
-                            int currentDiff = tempReq.getStartingFloor() - current_floor;
-                            int newDiff = reqList.get(i).getStartingFloor() - current_floor;
+                    }else{
+                        // Compare the temp req with the next one in the list
+                        int currentDiff = tempReq.getStartingFloor() - current_floor;
+                        int newDiff = reqList.get(i).getStartingFloor() - current_floor;
 
-                            // Replace if it is closer and downwards
-                            if(newDiff > currentDiff && newDiff < 0){
-                                tempReq = reqList.get(i);
-                                removeIndex = i;
-                            }
+                        // Replace if it is closer and upwards
+                        if(newDiff < currentDiff && newDiff > 0){
+                            tempReq = reqList.get(i);
+                            removeIndex = i;
+                        }
+                    }
+                }else{ //assume downwards
+                    // Assign a request to temp req only if it is correct direction
+                    if (tempReq == null) {
+                        if (reqList.get(i).getStartingFloor() - current_floor <= 0){
+                            tempReq = reqList.get(i);
+                            removeIndex = i;
+                        }
+                    }else{
+                        // Compare the temp req with the next one in the list
+                        int currentDiff = tempReq.getStartingFloor() - current_floor;
+                        int newDiff = reqList.get(i).getStartingFloor() - current_floor;
+
+                        // Replace if it is closer and downwards
+                        if(newDiff > currentDiff && newDiff < 0){
+                            tempReq = reqList.get(i);
+                            removeIndex = i;
                         }
                     }
                 }
-                if (tempReq != null) {
-                    currReqList.add(tempReq);
-                }
-                if (removeIndex != -1){
-                    //System.out.println("Removing index: " + removeIndex);
-                    reqList.remove(removeIndex);
-                }
+            }
+            if (tempReq != null) {
+                currReqList.add(tempReq);
+            }
+            if (removeIndex != -1){
+                //System.out.println("Removing index: " + removeIndex);
+                allReqList.remove(removeIndex);
             }
         }
+        //pickRequest(allReqList);
     }
 
     /**
@@ -169,10 +170,11 @@ public class ElevatorSubsystem implements Runnable {
     public void moveElevator() throws InterruptedException, IOException {
         // Chance to permanently Break
         int breakChance = (int) (Math.random() * 400);
+        System.out.println("This is break chance " + breakChance);
         if (breakChance == 144){
             state = ElevatorSubsystem.ElevatorState.BROKEN;
             System.out.printf("Elevator %d Current State: %s\n",elevator_id, state);
-            updateScheduler(false);
+            //updateScheduler(true);
             throw new InterruptedException("Elevator is broken");
 
         }
@@ -204,18 +206,21 @@ public class ElevatorSubsystem implements Runnable {
             currReqList.remove(k);
         }
 
-        System.out.println("Letting " + numLoading + " People on and " + numUnloading + " People off.");
+        System.out.println("Elevator " + elevator_id + " is on floor " + current_floor);
+
         // Let them on or off
         if (numLoading != 0 || numUnloading != 0){
-
+            System.out.println("Eleavtor" + elevator_id + "is Letting " + numLoading + " People on and " + numUnloading + " People off.");
             cycleDoors();
             numPeople = numPeople + numLoading - numUnloading;
         }
 
         // Move if we have direction and request
         if(upwards && !currReqList.isEmpty()){
+            System.out.println("Elevator " + elevator_id + " is going up");
             current_floor += 1;
         }else if (!upwards && !currReqList.isEmpty()){
+            System.out.println("Elevator " + elevator_id + " is going down");
             current_floor -= 1;
         }
     }
@@ -253,16 +258,16 @@ public class ElevatorSubsystem implements Runnable {
         System.out.printf("Elevator %d Current State: %s\n",elevator_id, state);
         isJammed = doors.toggleDoors();
 
-        while(isJammed){
-            System.out.printf("Elevator doors are jammed! Wait for repair...\n");
-
-            // Tell Scheduler elevator is broken
-            updateScheduler(true);
-            Thread.sleep(10000);
-
-            // Try again to open doors
-            doors.toggleDoors();
-        }
+//        while(isJammed){
+//            System.out.printf("Elevator " + elevator_id + " doors are jammed! Wait for repair...\n");
+//
+//            // Tell Scheduler elevator is broken
+//            updateScheduler(true);
+//            Thread.sleep(10000);
+//
+//            // Try again to open doors
+//            isJammed = doors.toggleDoors();
+//        }
 
         updateScheduler(false);
 
@@ -271,16 +276,16 @@ public class ElevatorSubsystem implements Runnable {
         Thread.sleep(2000);
 
         isJammed = doors.toggleDoors();
-        while(isJammed){
-            System.out.printf("Elevator doors are jammed! Wait for repair...\n");
-
-            // Tell Scheduler elevator is broken
-            updateScheduler(true);
-            Thread.sleep(10000);
-
-            // Try again to open doors
-            doors.toggleDoors();
-        }
+//        while(isJammed){
+//            System.out.printf("Elevator " + elevator_id + " doors are jammed! Wait for repair...\n");
+//
+//            // Tell Scheduler elevator is broken
+//            updateScheduler(true);
+//            Thread.sleep(10000);
+//
+//            // Try again to open doors
+//            isJammed = doors.toggleDoors();
+//        }
 
         state = ElevatorSubsystem.ElevatorState.DOORS_CLOSE;
         System.out.printf("Elevator %d Current State: %s\n",elevator_id, state);
@@ -298,7 +303,7 @@ public class ElevatorSubsystem implements Runnable {
         socket.send(sendPacket);
         socket.disconnect();
 
-        System.out.println("Elevator sent complete request");
+        System.out.println("Elevator " + elevator_id + " sent complete request");
     }
 
     /**

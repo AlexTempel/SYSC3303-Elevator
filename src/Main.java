@@ -1,4 +1,5 @@
 import java.net.SocketException;
+import java.net.UnknownHostException;
 
 public class Main {
     public static void main(String[] args) {
@@ -25,6 +26,8 @@ public class Main {
             Thread elevator4Thread = new Thread(elevator4Subsystem);
             elevator4Thread.start();
         } catch (SocketException e) {
+            throw new RuntimeException(e);
+        } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }
     }

@@ -51,7 +51,7 @@ class ElevatorSubsystemTest {
     }
 
     @Test
-    void pickRequest() throws SocketException {
+    void pickRequest() throws SocketException, UnknownHostException {
 
         ElevatorSubsystem e = new ElevatorSubsystem(1, 5);
 

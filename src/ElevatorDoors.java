@@ -29,7 +29,7 @@ public class ElevatorDoors {
 
         isJammed = false;
 
-        int jamChance = (int) (Math.random() * 10);
+        int jamChance = (int) (Math.random() * 100);
         if (jamChance == 5) {
             isJammed = true;
             return isJammed;
@@ -43,7 +43,7 @@ public class ElevatorDoors {
             action = "opening";
             isOpen = true;
         }
-        System.out.printf("Elevator doors are %s...\n", action);
+        //System.out.printf("Elevator doors are %s...\n", action);
 
         // Wait for the doors to close
         try {
