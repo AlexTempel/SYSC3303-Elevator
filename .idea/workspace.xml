@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7cd3474d-9d48-4a76-9fe0-8217bd918d43" name="Changes" comment="Fixed bug in convertToPacket()">
+    <list default="true" id="7cd3474d-9d48-4a76-9fe0-8217bd918d43" name="Changes" comment="Fixed bug in moveElevatorUntilFailure() test">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ElevatorSubsystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ElevatorSubsystem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ElevatorSubsystemTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ElevatorSubsystemTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,10 +64,11 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.ElevatorSubsystemTest">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="Elevator" />
@@ -97,9 +97,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main" />
         <item itemvalue="JUnit.ElevatorSubsystemTest" />
         <item itemvalue="JUnit.ElevatorSubsystemTest.moveElevatorUntilFailure" />
-        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>
@@ -121,7 +121,7 @@
       <updated>1712462974769</updated>
       <workItem from="1712462975815" duration="721000" />
       <workItem from="1712464895588" duration="46000" />
-      <workItem from="1712497750778" duration="4512000" />
+      <workItem from="1712497750778" duration="9934000" />
     </task>
     <task id="LOCAL-00001" summary="Project can run">
       <option name="closed" value="true" />
@@ -163,7 +163,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712503047017</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Fixed bug in moveElevatorUntilFailure() test">
+      <option name="closed" value="true" />
+      <created>1712507685638</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1712507685638</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -185,6 +193,33 @@
     <MESSAGE value="Added Test class" />
     <MESSAGE value="Fixed bug where code runs at rest state" />
     <MESSAGE value="Fixed bug in convertToPacket()" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed bug in convertToPacket()" />
+    <MESSAGE value="Fixed bug in moveElevatorUntilFailure() test" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed bug in moveElevatorUntilFailure() test" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/ElevatorSubsystem.java</url>
+          <line>185</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/ElevatorSubsystem.java</url>
+          <line>154</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/ElevatorSubsystem.java</url>
+          <line>116</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/ElevatorSubsystem.java</url>
+          <line>134</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

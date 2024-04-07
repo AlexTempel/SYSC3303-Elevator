@@ -93,7 +93,7 @@ public class ElevatorSubsystem implements Runnable {
         }
 
         // Add request to list
-        System.out.println("Elevator received request from scheduler");
+        System.out.printf("Elevator %d received request from scheduler\n", elevator_id);
         allReqList.add(Request.parsePacket(receivePacket));
         getRequests();
     }
