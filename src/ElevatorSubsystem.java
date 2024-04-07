@@ -157,7 +157,6 @@ public class ElevatorSubsystem implements Runnable {
      * Move the Elevator one floor and see if anyone is getting off/on
      */
     public void moveElevator() throws InterruptedException, IOException {
-
         // Chance to permanently Break
         int breakChance = (int) (Math.random() * 400);
         if (breakChance == 144){
@@ -209,7 +208,6 @@ public class ElevatorSubsystem implements Runnable {
         }else if (!upwards && !currReqList.isEmpty()){
             current_floor -= 1;
         }
-
     }
 
     /**
@@ -217,7 +215,6 @@ public class ElevatorSubsystem implements Runnable {
      * @return
      */
     public ArrayList<Request> getCurrReqList(){
-
         return currReqList;
     }
 
@@ -233,7 +230,6 @@ public class ElevatorSubsystem implements Runnable {
      * For Testing
      */
     public void setUpwards(){
-
         upwards = true;
     }
 
