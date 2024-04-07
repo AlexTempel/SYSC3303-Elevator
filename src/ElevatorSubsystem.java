@@ -294,6 +294,12 @@ public class ElevatorSubsystem implements Runnable {
      * @throws IOException
      */
     public void updateScheduler(boolean broken) throws IOException {
+
+        // Skip this is the scheduler has not sent anything
+        if (schedulerAddress == null){
+            return;
+        }
+
         //create new info packet
         ElevatorInfo info = new ElevatorInfo(current_floor, numPeople, upwards, broken);
         DatagramPacket infoPacket = info.convertToPacket();
