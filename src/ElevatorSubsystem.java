@@ -51,10 +51,18 @@ public class ElevatorSubsystem implements Runnable {
                         upwards = !upwards;
                     }
                 }
+
+                // Check for Reqs from the scheduler
                 getRequests();
+
+                // Continue servicing if a req came in
                 if (!allReqList.isEmpty()) {
                     pickRequest(allReqList);
-                    moveElevator();
+
+                    // Move only if there is a current req
+                    if (!currReqList.isEmpty()) {
+                        moveElevator();
+                    }
                     updateScheduler(false);
                 }
             }catch(Exception e){
@@ -144,7 +152,9 @@ public class ElevatorSubsystem implements Runnable {
                         }
                     }
                 }
-                currReqList.add(tempReq);
+                if (tempReq != null) {
+                    currReqList.add(tempReq);
+                }
                 if (removeIndex != -1){
                     //System.out.println("Removing index: " + removeIndex);
                     reqList.remove(removeIndex);
