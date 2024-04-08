@@ -183,7 +183,7 @@ public class ElevatorSubsystem implements Runnable {
         int numUnloading = 0;
         int numLoading = 0;
         int index = 0;
-        ArrayList<Integer> removalIndicies = new ArrayList<>();
+        ArrayList<Request> removalObjects = new ArrayList<>();
         for (Request request : currReqList) {
             if (current_floor == request.getStartingFloor()) {
                 numLoading  += 1;
@@ -191,29 +191,31 @@ public class ElevatorSubsystem implements Runnable {
                 numUnloading += 1;
 
                 // Remove the finished request
-                currReqList.get(index).complete();
-                sendConfirmation(currReqList.get(index));
+                request.complete();
+                sendConfirmation(request);
 
                 // Take out of current req list
-                removalIndicies.add(index);
+                removalObjects.add(request);
 
             }
             index += 1;
         }
 
         // Remove the completed trips
-        for(int k: removalIndicies){
-            currReqList.remove(k);
+        for(Request r: removalObjects){
+            currReqList.remove(r);
         }
 
         System.out.println("Elevator " + elevator_id + " is on floor " + current_floor);
 
         // Let them on or off
         if (numLoading != 0 || numUnloading != 0){
-            System.out.println("Eleavtor" + elevator_id + "is Letting " + numLoading + " People on and " + numUnloading + " People off.");
+            System.out.println("Eleavtor " + elevator_id + " is Letting " + numLoading + " People on and " + numUnloading + " People off.");
             cycleDoors();
             numPeople = numPeople + numLoading - numUnloading;
         }
+
+        System.out.println("Here is how many people are on Elevator " + elevator_id + ": " + numPeople);
 
         // Move if we have direction and request
         if(upwards && !currReqList.isEmpty()){
