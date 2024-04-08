@@ -66,7 +66,8 @@ public class ElevatorSubsystem implements Runnable {
                     }
                 }
             }catch(Exception e){
-                throw new RuntimeException(e);
+                System.out.printf("Elevator %d is permanently broken\n", elevator_id);
+                return;
             }
         }
     }
