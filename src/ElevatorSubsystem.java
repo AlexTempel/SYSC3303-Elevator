@@ -220,7 +220,7 @@ public class ElevatorSubsystem implements Runnable {
 
         // Let them on or off
         if (numLoading != 0 || numUnloading != 0){
-            System.out.println("Eleavtor " + elevator_id + " is Letting " + numLoading + " People on and " + numUnloading + " People off.");
+            System.out.println("Elevator " + elevator_id + " is Letting " + numLoading + " People on and " + numUnloading + " People off.");
             cycleDoors();
             numPeople = numPeople + numLoading - numUnloading;
         }
