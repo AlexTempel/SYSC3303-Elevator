@@ -22,14 +22,14 @@ public class ElevatorSubsystem implements Runnable {
      * Contruct the ElevatorSubsystem Object
      * @param id integer identifier of the elevator, also the recieve port
      */
-    public ElevatorSubsystem(int id, int elevatorInfoPort) throws SocketException, UnknownHostException {
+    public ElevatorSubsystem(int id, int elevatorInfoPort, InetAddress schedulerAddr) throws SocketException, UnknownHostException {
         this.elevator_id = id;
         this.doors = new ElevatorDoors();
         this.socket = new DatagramSocket(id);
         this.current_floor = 1; //start the Elevator at the ground floor
         this.state = ElevatorState.WAITING;
         this.ElevatorInfoSocketID = elevatorInfoPort;
-        this.schedulerAddress = InetAddress.getByName("localhost");
+        this.schedulerAddress = schedulerAddr;
 
     }
 
@@ -64,7 +64,6 @@ public class ElevatorSubsystem implements Runnable {
                     if (!currReqList.isEmpty()) {
                         moveElevator();
                     }
-                    updateScheduler(false);
                 }
             }catch(Exception e){
                 throw new RuntimeException(e);
@@ -88,11 +87,6 @@ public class ElevatorSubsystem implements Runnable {
             return;
         }
 
-        // Find scheduler address from rec'd packet
-//        if(schedulerAddress == null) {
-//            schedulerPort = receivePacket.getPort();
-//        }
-
         // Add request to list
         System.out.println("Elevator " + elevator_id + " received request from scheduler");
         allReqList.add(Request.parsePacket(receivePacket));
@@ -107,9 +101,6 @@ public class ElevatorSubsystem implements Runnable {
             return;
         } else {
             // Loop through all requests to see the appropriate one to service
-
-
-            //System.out.println("This is the size of currReqList: " + currReqList.size());
             Request tempReq = null;
             int removeIndex = -1;
 
@@ -161,7 +152,6 @@ public class ElevatorSubsystem implements Runnable {
                 allReqList.remove(removeIndex);
             }
         }
-        //pickRequest(allReqList);
     }
 
     /**
@@ -169,10 +159,10 @@ public class ElevatorSubsystem implements Runnable {
      */
     public void moveElevator() throws InterruptedException, IOException {
 
+        // Max height or ground floor, change direction
         if (current_floor == 22){
             upwards = false;
         }
-
         if (current_floor == 1){
             upwards = true;
         }
@@ -197,17 +187,16 @@ public class ElevatorSubsystem implements Runnable {
             if (current_floor == request.getStartingFloor()) {
                 numLoading  += 1;
             } else if (current_floor == request.getDestinationFloor()){
-                //if ((upwards && request.getDestinationFloor() > request.getStartingFloor()) || (!upwards && request.getDestinationFloor() < request.getStartingFloor()))
-                //{
-                    numUnloading += 1;
 
-                    // Remove the finished request
-                    request.complete();
-                    sendConfirmation(request);
+                numUnloading += 1;
 
-                    // Take out of current req list
-                    removalObjects.add(request);
-                //}
+                // Remove the finished request
+                request.complete();
+                sendConfirmation(request);
+
+                // Take out of current req list
+                removalObjects.add(request);
+
             }
         }
 
@@ -228,6 +217,9 @@ public class ElevatorSubsystem implements Runnable {
         System.out.println("Here is how many people are on Elevator " + elevator_id + ": " + numPeople);
 
         // Move if we have direction and request
+        state = ElevatorSubsystem.ElevatorState.MOVING;
+        System.out.printf("Elevator %d Current State: %s\n",elevator_id, state);
+
         if(upwards && !currReqList.isEmpty()){
             System.out.println("Elevator " + elevator_id + " is going up");
             current_floor += 1;
@@ -236,6 +228,7 @@ public class ElevatorSubsystem implements Runnable {
             current_floor -= 1;
         }
 
+        updateScheduler(false);
         Thread.sleep(4000);
     }
 

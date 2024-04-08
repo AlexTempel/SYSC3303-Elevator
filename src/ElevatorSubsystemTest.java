@@ -13,7 +13,7 @@ class ElevatorSubsystemTest {
     void getRequests() throws IOException {
 
         // Create elevator object and request
-        ElevatorSubsystem testElevator = new ElevatorSubsystem(19505, 101);
+        ElevatorSubsystem testElevator = new ElevatorSubsystem(19505, 101, InetAddress.getByName("localhost"));
         testElevator.setSchedulerAddress();
 
         // Load a bunch of request packets on the elevator socket
@@ -53,7 +53,7 @@ class ElevatorSubsystemTest {
     @Test
     void pickRequest() throws SocketException, UnknownHostException {
 
-        ElevatorSubsystem e = new ElevatorSubsystem(1, 5);
+        ElevatorSubsystem e = new ElevatorSubsystem(1, 5, InetAddress.getByName("localhost"));
 
         Request r1 = new Request(1, 4, 10);
         Request r2 = new Request(2, 3, 10);
@@ -87,7 +87,7 @@ class ElevatorSubsystemTest {
 
     @Test
     void moveElevator() throws IOException, InterruptedException {
-        ElevatorSubsystem e1 = new ElevatorSubsystem(    19507, 19509);
+        ElevatorSubsystem e1 = new ElevatorSubsystem(    19507, 19509, InetAddress.getByName("localhost"));
 
         DatagramSocket newSocket = new DatagramSocket(19509);
 
@@ -122,7 +122,7 @@ class ElevatorSubsystemTest {
 
     @Test
     void moveElevatorUntilFailure() throws IOException{
-        ElevatorSubsystem e1 = new ElevatorSubsystem(    19510, 19511);
+        ElevatorSubsystem e1 = new ElevatorSubsystem(    19510, 19511, InetAddress.getByName("localhost"));
 
         DatagramSocket newSocket = new DatagramSocket(19511);
 
