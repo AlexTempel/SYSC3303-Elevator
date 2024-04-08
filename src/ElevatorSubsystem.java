@@ -168,6 +168,15 @@ public class ElevatorSubsystem implements Runnable {
      * Move the Elevator one floor and see if anyone is getting off/on
      */
     public void moveElevator() throws InterruptedException, IOException {
+
+        if (current_floor == 22){
+            upwards = false;
+        }
+
+        if (current_floor == 1){
+            upwards = true;
+        }
+
         // Chance to permanently Break
         int breakChance = (int) (Math.random() * 400);
         System.out.println("This is break chance " + breakChance);
@@ -188,15 +197,17 @@ public class ElevatorSubsystem implements Runnable {
             if (current_floor == request.getStartingFloor()) {
                 numLoading  += 1;
             } else if (current_floor == request.getDestinationFloor()){
-                numUnloading += 1;
+                if ((upwards && request.getDestinationFloor() > request.getStartingFloor()) || (!upwards && request.getDestinationFloor() < request.getStartingFloor()))
+                {
+                    numUnloading += 1;
 
-                // Remove the finished request
-                request.complete();
-                sendConfirmation(request);
+                    // Remove the finished request
+                    request.complete();
+                    sendConfirmation(request);
 
-                // Take out of current req list
-                removalObjects.add(request);
-
+                    // Take out of current req list
+                    removalObjects.add(request);
+                }
             }
         }
 
