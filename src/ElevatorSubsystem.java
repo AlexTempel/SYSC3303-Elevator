@@ -118,7 +118,7 @@ public class ElevatorSubsystem implements Runnable {
                 if (upwards) {
                     // Assign a request to temp req only if it is correct direction
                     if (tempReq == null) {
-                        if (reqList.get(i).getStartingFloor() - current_floor >= 0){
+                        if (reqList.get(i).getStartingFloor() - current_floor >= 0 && reqList.get(i).getDestinationFloor() > reqList.get(i).getStartingFloor()){
                             tempReq = reqList.get(i);
                             removeIndex = i;
                         }
@@ -128,7 +128,7 @@ public class ElevatorSubsystem implements Runnable {
                         int newDiff = reqList.get(i).getStartingFloor() - current_floor;
 
                         // Replace if it is closer and upwards
-                        if(newDiff < currentDiff && newDiff > 0){
+                        if(newDiff < currentDiff && newDiff > 0 && reqList.get(i).getDestinationFloor() > reqList.get(i).getStartingFloor()){
                             tempReq = reqList.get(i);
                             removeIndex = i;
                         }
@@ -136,7 +136,7 @@ public class ElevatorSubsystem implements Runnable {
                 }else{ //assume downwards
                     // Assign a request to temp req only if it is correct direction
                     if (tempReq == null) {
-                        if (reqList.get(i).getStartingFloor() - current_floor <= 0){
+                        if (reqList.get(i).getStartingFloor() - current_floor <= 0 && reqList.get(i).getDestinationFloor() < reqList.get(i).getStartingFloor()){
                             tempReq = reqList.get(i);
                             removeIndex = i;
                         }
@@ -146,7 +146,7 @@ public class ElevatorSubsystem implements Runnable {
                         int newDiff = reqList.get(i).getStartingFloor() - current_floor;
 
                         // Replace if it is closer and downwards
-                        if(newDiff > currentDiff && newDiff < 0){
+                        if(newDiff > currentDiff && newDiff < 0 && reqList.get(i).getDestinationFloor() < reqList.get(i).getStartingFloor()){
                             tempReq = reqList.get(i);
                             removeIndex = i;
                         }
@@ -179,11 +179,11 @@ public class ElevatorSubsystem implements Runnable {
 
         // Chance to permanently Break
         int breakChance = (int) (Math.random() * 400);
-        System.out.println("This is break chance " + breakChance);
+        //System.out.println("This is break chance " + breakChance);
         if (breakChance == 144){
             state = ElevatorSubsystem.ElevatorState.BROKEN;
             System.out.printf("Elevator %d Current State: %s\n",elevator_id, state);
-            //updateScheduler(true);
+            updateScheduler(true);
             throw new InterruptedException("Elevator is broken");
 
         }
@@ -197,8 +197,8 @@ public class ElevatorSubsystem implements Runnable {
             if (current_floor == request.getStartingFloor()) {
                 numLoading  += 1;
             } else if (current_floor == request.getDestinationFloor()){
-                if ((upwards && request.getDestinationFloor() > request.getStartingFloor()) || (!upwards && request.getDestinationFloor() < request.getStartingFloor()))
-                {
+                //if ((upwards && request.getDestinationFloor() > request.getStartingFloor()) || (!upwards && request.getDestinationFloor() < request.getStartingFloor()))
+                //{
                     numUnloading += 1;
 
                     // Remove the finished request
@@ -207,7 +207,7 @@ public class ElevatorSubsystem implements Runnable {
 
                     // Take out of current req list
                     removalObjects.add(request);
-                }
+                //}
             }
         }
 
