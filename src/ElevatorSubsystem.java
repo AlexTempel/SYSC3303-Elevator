@@ -235,6 +235,8 @@ public class ElevatorSubsystem implements Runnable {
             System.out.println("Elevator " + elevator_id + " is going down");
             current_floor -= 1;
         }
+
+        Thread.sleep(4000);
     }
 
     /**
@@ -270,16 +272,16 @@ public class ElevatorSubsystem implements Runnable {
         System.out.printf("Elevator %d Current State: %s\n",elevator_id, state);
         isJammed = doors.toggleDoors();
 
-//        while(isJammed){
-//            System.out.printf("Elevator " + elevator_id + " doors are jammed! Wait for repair...\n");
-//
-//            // Tell Scheduler elevator is broken
-//            updateScheduler(true);
-//            Thread.sleep(10000);
-//
-//            // Try again to open doors
-//            isJammed = doors.toggleDoors();
-//        }
+        while(isJammed){
+            System.out.printf("Elevator " + elevator_id + " doors are jammed! Wait for repair...\n");
+
+            // Tell Scheduler elevator is broken
+            updateScheduler(true);
+            Thread.sleep(10000);
+
+            // Try again to open doors
+            isJammed = doors.toggleDoors();
+        }
 
         updateScheduler(false);
 
@@ -288,16 +290,16 @@ public class ElevatorSubsystem implements Runnable {
         Thread.sleep(2000);
 
         isJammed = doors.toggleDoors();
-//        while(isJammed){
-//            System.out.printf("Elevator " + elevator_id + " doors are jammed! Wait for repair...\n");
-//
-//            // Tell Scheduler elevator is broken
-//            updateScheduler(true);
-//            Thread.sleep(10000);
-//
-//            // Try again to open doors
-//            isJammed = doors.toggleDoors();
-//        }
+        while(isJammed){
+            System.out.printf("Elevator " + elevator_id + " doors are jammed! Wait for repair...\n");
+
+            // Tell Scheduler elevator is broken
+            updateScheduler(true);
+            Thread.sleep(10000);
+
+            // Try again to open doors
+            isJammed = doors.toggleDoors();
+        }
 
         state = ElevatorSubsystem.ElevatorState.DOORS_CLOSE;
         System.out.printf("Elevator %d Current State: %s\n",elevator_id, state);
