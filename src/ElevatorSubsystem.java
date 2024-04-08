@@ -182,7 +182,7 @@ public class ElevatorSubsystem implements Runnable {
         // See if anyone is getting on or off
         int numUnloading = 0;
         int numLoading = 0;
-        int index = 0;
+
         ArrayList<Request> removalObjects = new ArrayList<>();
         for (Request request : currReqList) {
             if (current_floor == request.getStartingFloor()) {
@@ -198,7 +198,6 @@ public class ElevatorSubsystem implements Runnable {
                 removalObjects.add(request);
 
             }
-            index += 1;
         }
 
         // Remove the completed trips
