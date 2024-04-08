@@ -210,6 +210,7 @@ public class ElevatorSubsystem implements Runnable {
         // Let them on or off
         if (numLoading != 0 || numUnloading != 0){
             System.out.println("Eleavtor " + elevator_id + " is Letting " + numLoading + " People on and " + numUnloading + " People off.");
+            Thread.sleep(4000); //Simulate Loading time
             cycleDoors();
             numPeople = numPeople + numLoading - numUnloading;
         }
@@ -229,7 +230,7 @@ public class ElevatorSubsystem implements Runnable {
         }
 
         updateScheduler(false);
-        Thread.sleep(4000);
+        Thread.sleep(11000);
     }
 
     /**
