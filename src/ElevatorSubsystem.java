@@ -148,7 +148,6 @@ public class ElevatorSubsystem implements Runnable {
                 currReqList.add(tempReq);
             }
             if (removeIndex != -1){
-                //System.out.println("Removing index: " + removeIndex);
                 allReqList.remove(removeIndex);
             }
         }
@@ -347,6 +346,10 @@ public class ElevatorSubsystem implements Runnable {
     public void setSchedulerAddress() throws UnknownHostException {
         schedulerAddress = InetAddress.getByName("localhost");
         schedulerPort = 156;
+    }
+
+    public void setAllReqList(ArrayList<Request> list){
+        allReqList = list;
     }
 
     public enum ElevatorState {
