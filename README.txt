@@ -1,5 +1,6 @@
 SYSC 3303 Iteration 5 Group 8
-
+Setup instructions:
+in main, update the elevator port, elevator info port, and scheduler address to the correct addresses being used in the system. then run main
 Elevator System 
 ElevatorDoor.java: file for the elevator doors, is used for checking if the doors are open or closed, and for opening and closing the door.
 ElevatorInfo.java: file for holding the infromation for the elevator, stores the floor number the number of passengers and if the elevator is going upwards or is broken.
